@@ -16,7 +16,7 @@ def konstantin_scheduled_data_time_app(event: ScheduledEvent, api: Api, cache: C
     # start_time and end_time are inclusive so the query is structured accordingly to avoid processing duplicate data
     # We are only querying for weight_on_bit field since that is the only field we need. It is nested under data.
     records = api.get_dataset(
-        provider="corva",
+        provider="big-data-energy",
         dataset=SETTINGS.output_collection,
         query={
             'asset_id': asset_id,
@@ -34,7 +34,9 @@ def konstantin_scheduled_data_time_app(event: ScheduledEvent, api: Api, cache: C
 
     # Computing mean weight on bit from the list of realtime wits records
     mean_weight_on_bit = statistics.mean(record.get("data", {}).get("weight_on_bit", 0) for record in records)
+    rop = records[0].get("rop")
     company_id = records[0].get("company_id")
+
 
     # Getting last exported timestamp from redis
     last_exported_timestamp = int(cache.load(key='last_exported_timestamp') or 0)
@@ -53,6 +55,7 @@ def konstantin_scheduled_data_time_app(event: ScheduledEvent, api: Api, cache: C
         "collection": SETTINGS.output_collection,
         "data": {
             "mean_weight_on_bit": mean_weight_on_bit,
+            "rop": rop
             "start_time": start_time,
             "end_time": end_time
         },
