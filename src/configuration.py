@@ -2,9 +2,8 @@ import pydantic
 
 
 class Settings(pydantic.BaseSettings):
-    provider: str
-    output_collection: str = "sample-drilling-scheduler-collection"
-    wits_collection: str = "wits"
+    provider: str = "big-data-energy"
+    output_collection: str = "konstantin-scheduled-data-time-app"
     version: int = 1
 
 

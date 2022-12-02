@@ -5,7 +5,7 @@ from corva import Api, Cache, Logger, ScheduledEvent
 from src.configuration import SETTINGS
 
 
-def sample_drilling_scheduler_app(event: ScheduledEvent, api: Api, cache: Cache):
+def konstantin_scheduled_data_time_app(event: ScheduledEvent, api: Api, cache: Cache):
 
     # You have access to asset_id, start_time and end_time of the event.
     asset_id = event.asset_id
@@ -17,7 +17,7 @@ def sample_drilling_scheduler_app(event: ScheduledEvent, api: Api, cache: Cache)
     # We are only querying for weight_on_bit field since that is the only field we need. It is nested under data.
     records = api.get_dataset(
         provider="corva",
-        dataset=SETTINGS.wits_collection,
+        dataset=SETTINGS.output_collection,
         query={
             'asset_id': asset_id,
             'timestamp': {
